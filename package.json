@@ -1,0 +1,20 @@
+{
+	"name": "fast-food-backend",
+	"description": "",
+	"homepage": "https://github.com/CaioOliveira793/fast-food-backend#readme",
+	"keywords": [],
+	"author": "",
+	"license": "ISC",
+	"version": "1.0.0",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/CaioOliveira793/fast-food-backend.git"
+	},
+	"bugs": {
+		"url": "https://github.com/CaioOliveira793/fast-food-backend/issues"
+	},
+	"main": "index.js",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1"
+	}
+}

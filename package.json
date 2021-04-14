@@ -23,6 +23,7 @@
 		"build": "babel src --extensions \".js,.ts\" --out-dir dist --copy-files --no-copy-ignored"
 	},
 	"dependencies": {
+		"bcrypt": "^5.0.1",
 		"uuid": "^8.3.2"
 	},
 	"devDependencies": {
@@ -31,6 +32,8 @@
 		"@babel/node": "^7.13.13",
 		"@babel/preset-env": "^7.13.15",
 		"@babel/preset-typescript": "^7.13.0",
+		"@types/bcrypt": "^3.0.1",
+		"@types/faker": "^5.5.1",
 		"@types/jest": "^26.0.22",
 		"@types/node": "^14.14.37",
 		"@types/uuid": "^8.3.0",
@@ -38,6 +41,7 @@
 		"@typescript-eslint/parser": "^4.21.0",
 		"babel-plugin-module-resolver": "^4.1.0",
 		"eslint": "^7.24.0",
+		"faker": "^5.5.3",
 		"jest": "^26.6.3",
 		"rimraf": "^3.0.2",
 		"ts-jest": "^26.5.4",

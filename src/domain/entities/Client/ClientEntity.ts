@@ -1,22 +1,21 @@
 import { v4 as uuidv4 } from 'uuid';
 
 import { Actor } from '../abstract/Actor';
-import { MailService } from '../../services/MailService';
 
 export class Client extends Actor {
 	public readonly id: string;
 	protected name: string;
 	protected email: string;
-	protected password: string;
+	protected passwordHash: string;
 
-	private requestedOrdersId: string[];
-	private favoriteFoodsId: string[];
+	private requestedOrdersId: Set<string>;
+	private favoriteFoodsId: Set<string>;
 
 	constructor(
 		id: string,
 		name: string,
 		email: string,
-		password: string,
+		passwordHash: string,
 		requestedOrdersId: string[],
 		favoriteFoodsId: string[],
 	) {
@@ -24,52 +23,48 @@ export class Client extends Actor {
 		this.id = id;
 		this.name = name;
 		this.email = email;
-		this.password = password;
-		this.requestedOrdersId = requestedOrdersId;
-		this.favoriteFoodsId = favoriteFoodsId;
+		this.passwordHash = passwordHash;
+		this.requestedOrdersId = new Set(requestedOrdersId);
+		this.favoriteFoodsId = new Set(favoriteFoodsId);
 	}
 
-	public static new(name: string, email: string, password: string): Client {
-		return new Client(uuidv4(), name, email, password, [], []);
+	public static new(name: string, email: string, passwordHash: string): Client {
+		return new Client(uuidv4(), name, email, passwordHash, [], []);
 	}
 
 	public getName(): string {
-		throw new Error('Method not implemented.');
+		return this.name;
 	}
 	public setName(name: string): void {
-		throw new Error('Method not implemented.');
+		this.name = name;
 	}
 	public getEmail(): string {
-		throw new Error('Method not implemented.');
+		return this.email;
 	}
-	public updateEmail(email: string, mailService: MailService): void {
-		throw new Error('Method not implemented.');
+	public setEmail(email: string): void {
+		this.email = email;
 	}
-	public updatePassword(password: string, mailService: MailService): void {
-		throw new Error('Method not implemented.');
+	public getPasswordHash(): string {
+		return this.passwordHash;
 	}
-	public authenticate(email: string, password: string): boolean {
-		throw new Error('Method not implemented.');
+	public setPasswordHash(passwordHash: string): void {
+		this.passwordHash = passwordHash;
 	}
 
-	public getFavoriteFoodsId(): string {
-		throw new Error('Method not implemented.');
+	public getFavoriteFoodsId(): string[] {
+		return [...this.favoriteFoodsId];
 	}
 	public addFavoriteFood(foodId: string): void {
-		throw new Error('Method not implemented.');
+		this.favoriteFoodsId.add(foodId);
 	}
 	public removeFavoriteFood(foodId: string): void {
-		throw new Error('Method not implemented.');
+		this.favoriteFoodsId.delete(foodId);
 	}
 
 	public getRequestedOrdersId(): string[] {
-		throw new Error('Method not implemented.');
+		return [...this.requestedOrdersId];
 	}
 	public addRequestedOrder(orderId: string): void {
-		throw new Error('Method not implemented.');
-	}
-
-	public getPendingOrdersId(): string[] {
-		throw new Error('Method not implemented.');
+		this.requestedOrdersId.add(orderId);
 	}
 }

@@ -1,6 +1,6 @@
 import { v4 as uuidv4 } from 'uuid';
 
-import { Actor } from '../abstract/Actor';
+import { Actor } from '@entities/abstract/Actor';
 
 export class Client extends Actor {
 	public readonly id: string;
@@ -38,12 +38,14 @@ export class Client extends Actor {
 	public setName(name: string): void {
 		this.name = name;
 	}
+
 	public getEmail(): string {
 		return this.email;
 	}
 	public setEmail(email: string): void {
 		this.email = email;
 	}
+
 	public getPasswordHash(): string {
 		return this.passwordHash;
 	}

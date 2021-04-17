@@ -16,8 +16,8 @@ export class Client extends Actor {
 		name: string,
 		email: string,
 		passwordHash: string,
-		requestedOrdersId: string[],
-		favoriteFoodsId: string[],
+		requestedOrdersId?: string[],
+		favoriteFoodsId?: string[],
 	) {
 		super();
 		this.id = id;

@@ -1,7 +1,7 @@
 import { datatype, internet, name } from 'faker';
 import { URL } from 'url';
 
-import { Food } from './FoodEntity';
+import { Food } from '@entities/Food';
 
 describe('Food entity', () => {
 

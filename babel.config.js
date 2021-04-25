@@ -15,6 +15,7 @@ module.exports = {
 			alias: {
 				'@entities': './src/domain/entities',
 				'@repositories': './src/domain/repositories',
+				'@domainTypes': './src/domain/types',
 			}
 		}]
 	],

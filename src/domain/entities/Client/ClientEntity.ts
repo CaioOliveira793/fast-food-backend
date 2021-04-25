@@ -1,23 +1,23 @@
-import { v4 as uuidv4 } from 'uuid';
-
 import { Actor } from '@entities/abstract/Actor';
+import { Id } from '@domainTypes/Id';
+
 
 export class Client extends Actor {
-	public readonly id: string;
+	public readonly id: Id;
 	protected name: string;
 	protected email: string;
 	protected passwordHash: string;
 
-	private requestedOrdersId: Set<string>;
-	private favoriteFoodsId: Set<string>;
+	private requestedOrdersId: Set<Id>;
+	private favoriteFoodsId: Set<Id>;
 
 	constructor(
-		id: string,
+		id: Id,
 		name: string,
 		email: string,
 		passwordHash: string,
-		requestedOrdersId?: string[],
-		favoriteFoodsId?: string[],
+		requestedOrdersId?: Id[],
+		favoriteFoodsId?: Id[],
 	) {
 		super();
 		this.id = id;
@@ -29,7 +29,7 @@ export class Client extends Actor {
 	}
 
 	public static new(name: string, email: string, passwordHash: string): Client {
-		return new Client(uuidv4(), name, email, passwordHash, [], []);
+		return new Client(new Id, name, email, passwordHash, [], []);
 	}
 
 	public getName(): string {
@@ -53,20 +53,20 @@ export class Client extends Actor {
 		this.passwordHash = passwordHash;
 	}
 
-	public getFavoriteFoodsId(): string[] {
+	public getFavoriteFoodsId(): Id[] {
 		return [...this.favoriteFoodsId];
 	}
-	public addFavoriteFood(foodId: string): void {
+	public addFavoriteFood(foodId: Id): void {
 		this.favoriteFoodsId.add(foodId);
 	}
-	public removeFavoriteFood(foodId: string): void {
+	public removeFavoriteFood(foodId: Id): void {
 		this.favoriteFoodsId.delete(foodId);
 	}
 
-	public getRequestedOrdersId(): string[] {
+	public getRequestedOrdersId(): Id[] {
 		return [...this.requestedOrdersId];
 	}
-	public addRequestedOrder(orderId: string): void {
+	public addRequestedOrder(orderId: Id): void {
 		this.requestedOrdersId.add(orderId);
 	}
 }

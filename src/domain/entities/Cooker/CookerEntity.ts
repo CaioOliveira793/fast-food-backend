@@ -1,6 +1,5 @@
-import { v4 as uuidv4 } from 'uuid';
-
 import { Actor } from '@entities/abstract/Actor';
+import { Id } from '@domainTypes/Id';
 
 export interface FinishedFood {
 	orderId: string;
@@ -9,7 +8,7 @@ export interface FinishedFood {
 }
 
 export class Cooker extends Actor {
-	public readonly id: string;
+	public readonly id: Id;
 
 	protected name: string;
 	protected email: string;
@@ -18,7 +17,7 @@ export class Cooker extends Actor {
 	private finishedFoods: FinishedFood[];
 
 	constructor(
-		id: string,
+		id: Id,
 		name: string,
 		email: string,
 		passwordHash: string,
@@ -33,7 +32,7 @@ export class Cooker extends Actor {
 	}
 
 	public static new(name: string, email: string, passwordHash: string): Cooker {
-		return new Cooker(uuidv4(), name, email, passwordHash);
+		return new Cooker(new Id, name, email, passwordHash);
 	}
 
 	public getName(): string {

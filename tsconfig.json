@@ -27,7 +27,8 @@
 			"@entities/*": ["domain/entities/*"],
 			"@repositories/*": [
 				"domain/repositories/*"
-			]
+			],
+			"@domainTypes/*": ["domain/types/*"]
 		},
 		"typeRoots": [
 			"./node_modules/@types",

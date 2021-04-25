@@ -1,10 +1,10 @@
-import { v4 as uuidv4 } from 'uuid';
 import { URL } from 'url';
 
 import { Entity } from '@entities/abstract/Entity';
+import { Id } from '@domainTypes/Id';
 
 export class Food extends Entity {
-	public readonly id: string;
+	public readonly id: Id;
 
 	private name: string;
 	private rawPrice: number;
@@ -12,7 +12,7 @@ export class Food extends Entity {
 	private imageAddress?: URL;
 
 	constructor(
-		id: string,
+		id: Id,
 		name: string,
 		rawPrice: number,
 		discount = 0,
@@ -33,7 +33,7 @@ export class Food extends Entity {
 	}
 
 	public static new(name: string, rawPrice: number, discount = 0, imageAddress?: URL): Food {
-		return new Food(uuidv4(), name, rawPrice, discount, imageAddress);
+		return new Food(new Id, name, rawPrice, discount, imageAddress);
 	}
 
 	public getName(): string {

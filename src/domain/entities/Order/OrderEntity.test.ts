@@ -1,12 +1,12 @@
 import { datatype, name } from 'faker';
-import { v4 as uuidv4 } from 'uuid';
 
 import { Order, OrderStatus } from '@entities/Order';
 import { OrderItem } from '@entities/OrderItem';
+import { Id } from '@domainTypes/Id';
 
 
 describe('Order entity', () => {
-	const repeatedId = uuidv4();
+	const repeatedId = new Id;
 	let orderItem: OrderItem;
 
 	beforeEach(() => {
@@ -58,10 +58,10 @@ describe('Order entity', () => {
 	});
 
 	it('finish an inexistent order item', () => {
-		const itemId = uuidv4();
+		const itemId = new Id;
 		const order = Order.new(repeatedId, [orderItem]);
 		expect(() => order.finishItem(itemId, 1))
-			.toThrowError(new Error(`Order Item with id ${itemId} was not found`));
+			.toThrowError(new Error(`Order Item with id ${itemId.getValue()} was not found`));
 	});
 
 	it('return the status "Preparing" after creation', () => {

@@ -94,7 +94,7 @@ describe('Food entity', () => {
 		const foodDiscount = datatype.number({ min: 0, max: 1, precision: 0.0001 });
 		const food = Food.new(name.findName(), datatype.number(), foodDiscount);
 
-		const lowerThanZeroDiscount = datatype.number({ min: -100, max: 0 });
+		const lowerThanZeroDiscount = datatype.number({ min: -100, max: -.1 });
 		expect(() => food.setDiscount(lowerThanZeroDiscount))
 			.toThrowError(
 				new Error(
@@ -104,7 +104,7 @@ describe('Food entity', () => {
 		expect(food.getDiscount()).toBe(foodDiscount);
 
 		{
-			const lowerThanZeroDiscount = datatype.number({ min: -100, max: 0 });
+			const lowerThanZeroDiscount = datatype.number({ min: -100, max: -.1 });
 			expect(() => Food.new(name.findName(), datatype.number(), lowerThanZeroDiscount))
 				.toThrowError(
 					new Error(

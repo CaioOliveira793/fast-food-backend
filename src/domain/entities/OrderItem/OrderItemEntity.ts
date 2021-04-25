@@ -1,12 +1,12 @@
-import { v4 as uuidv4 } from 'uuid';
 import { URL } from 'url';
 
 import { Entity } from '@entities/abstract/Entity';
 import { Food } from '@entities/Food';
+import { Id } from '@domainTypes/Id';
 
 
 export class OrderItem extends Entity {
-	public readonly id: string;
+	public readonly id: Id;
 
 	public readonly name: string;
 	public readonly imageAddress?: URL;
@@ -15,7 +15,7 @@ export class OrderItem extends Entity {
 	private finishedCount: number;
 
 	constructor(
-		id: string,
+		id: Id,
 		name: string,
 		price: number,
 		count: number,
@@ -32,11 +32,11 @@ export class OrderItem extends Entity {
 	}
 
 	public static new(name: string, unitPrice: number, count: number, imageAddress?: URL): OrderItem {
-		return new OrderItem(uuidv4(), name, unitPrice * count, count, 0, imageAddress);
+		return new OrderItem(new Id, name, unitPrice * count, count, 0, imageAddress);
 	}
 	public static fromFood(food: Food, count: number): OrderItem {
 		return new OrderItem(
-			uuidv4(),
+			new Id,
 			food.getName(),
 			food.getCalculatedPrice() * count,
 			count,

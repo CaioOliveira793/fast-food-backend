@@ -1,7 +1,6 @@
-import { v4 as uuidv4 } from 'uuid';
-
 import { Entity } from '@entities/abstract/Entity';
 import { OrderItem } from '@entities/OrderItem';
+import { Id } from '@domainTypes/Id';
 
 export const enum OrderStatus {
 	Preparing,
@@ -10,16 +9,16 @@ export const enum OrderStatus {
 }
 
 export class Order extends Entity {
-	public readonly id: string;
+	public readonly id: Id;
 
-	public readonly clientId: string;
+	public readonly clientId: Id;
 	private readonly items: Map<string, OrderItem>;
 	public readonly totalPrice: number;
 	private status: OrderStatus;
 
 	constructor(
-		id: string,
-		clientId: string,
+		id: Id,
+		clientId: Id,
 		items: OrderItem[],
 		totalPrice: number,
 		status: OrderStatus
@@ -27,19 +26,19 @@ export class Order extends Entity {
 		super();
 		this.id = id;
 		this.clientId = clientId;
-		this.items = new Map(items.map(item => [item.id, item]));
+		this.items = new Map(items.map(item => [item.id.getValue(), item]));
 		this.totalPrice = totalPrice;
 		this.status = status;
 	}
 
-	public static new(clientId: string, items: OrderItem[]): Order {
+	public static new(clientId: Id, items: OrderItem[]): Order {
 		if (items.length < 1)
 			throw new Error('A Order need at least one item to be created');
 
 		const totalPrice = items
 			.map(orderItem => orderItem.price * orderItem.count)
 			.reduce((prevPrice, currPrice) => prevPrice + currPrice);
-		return new Order(uuidv4(), clientId, items, totalPrice, OrderStatus.Preparing);
+		return new Order(new Id, clientId, items, totalPrice, OrderStatus.Preparing);
 	}
 
 	public getItems(): OrderItem[] {
@@ -50,12 +49,12 @@ export class Order extends Entity {
 		return this.status;
 	}
 
-	public finishItem(itemId: string, count: number): void {
-		const orderItem = this.items.get(itemId);
-		if (!orderItem) throw new Error(`Order Item with id ${itemId} was not found`);
+	public finishItem(itemId: Id, count: number): void {
+		const orderItem = this.items.get(itemId.getValue());
+		if (!orderItem) throw new Error(`Order Item with id ${itemId.getValue()} was not found`);
 
 		orderItem.finish(count);
-		this.items.set(itemId, orderItem);
+		this.items.set(itemId.getValue(), orderItem);
 
 		if (orderItem.isFinished() && this.isReady()) {
 			this.status = OrderStatus.Ready;

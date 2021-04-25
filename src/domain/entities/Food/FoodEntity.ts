@@ -69,7 +69,7 @@ export class Food extends Entity {
 		return this.rawPrice - (this.rawPrice * this.discount);
 	}
 
-	public getImageAddress(): URL | void {
+	public getImageAddress(): URL | undefined {
 		return this.imageAddress;
 	}
 	public setImageAddress(imageAddress: URL): void {

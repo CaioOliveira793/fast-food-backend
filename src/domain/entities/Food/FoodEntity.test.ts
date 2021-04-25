@@ -2,18 +2,19 @@ import { datatype, internet, name } from 'faker';
 import { URL } from 'url';
 
 import { Food } from '@entities/Food';
+import { Price } from '@domainTypes/Price';
 
 describe('Food entity', () => {
 
 	it('return the name', () => {
 		const foodName = name.findName();
-		const food = Food.new(foodName, datatype.number());
+		const food = Food.new(foodName, new Price(datatype.number()));
 
 		expect(food.getName()).toBe(foodName);
 	});
 
 	it('modify the name', () => {
-		const food = Food.new(name.findName(), datatype.number());
+		const food = Food.new(name.findName(), new Price(datatype.number()));
 		const newFoodName = name.findName();
 		food.setName(newFoodName);
 
@@ -21,45 +22,29 @@ describe('Food entity', () => {
 	});
 
 	it('return the raw price', () => {
-		const rawFoodPrice = datatype.number();
+		const rawFoodPrice = new Price(datatype.number());
 		const food = Food.new(name.findName(), rawFoodPrice);
 
-		expect(food.getRawPrice()).toBe(rawFoodPrice);
+		expect(food.getRawPrice()).toStrictEqual(rawFoodPrice);
 	});
 
 	it('set the raw price', () => {
-		const food = Food.new(name.findName(), datatype.number());
-		const newRawPrice = datatype.number();
+		const food = Food.new(name.findName(), new Price(datatype.number()));
+		const newRawPrice = new Price(datatype.number());
 		food.setRawPrice(newRawPrice);
 
 		expect(food.getRawPrice()).toBe(newRawPrice);
 	});
 
-	it('throw a error when set the raw price a negative value', () => {
-		const rawFoodPrice = datatype.number();
-		const food = Food.new(name.findName(), rawFoodPrice);
-		const negativeRawPrice = datatype.number({ min: -999, max: 0 });
-
-		expect(() => food.setRawPrice(negativeRawPrice))
-			.toThrowError(new Error(`A food price can not be a negative value. ${negativeRawPrice}`));
-		expect(food.getRawPrice()).toBe(rawFoodPrice);
-
-		{
-			const negativeRawPrice = datatype.number({ min: -999, max: 0 });
-			expect(() => Food.new(name.findName(), negativeRawPrice))
-				.toThrowError(new Error(`A food price can not be a negative value. ${negativeRawPrice}`));
-		}
-	});
-
 	it('return the discount', () => {
 		const foodDiscount = datatype.number({ min: 0, max: 1, precision: 0.0001 });
-		const food = Food.new(name.findName(), datatype.number(), foodDiscount);
+		const food = Food.new(name.findName(), new Price(datatype.number()), foodDiscount);
 
 		expect(food.getDiscount()).toBe(foodDiscount);
 	});
 
 	it('set the discount', () => {
-		const food = Food.new(name.findName(), datatype.number());
+		const food = Food.new(name.findName(), new Price(datatype.number()));
 		const newDiscount = datatype.number({ min: 0, max: 1, precision: 0.0001 });
 		food.setDiscount(newDiscount);
 
@@ -68,7 +53,7 @@ describe('Food entity', () => {
 
 	it('throw a error when set the discount greater than 1', () => {
 		const foodDiscount = datatype.number({ min: 0, max: 1, precision: 0.0001 });
-		const food = Food.new(name.findName(), datatype.number(), foodDiscount);
+		const food = Food.new(name.findName(), new Price(datatype.number()), foodDiscount);
 
 		const greaterThanOneDiscount = datatype.number({ min: 1, max: 100 });
 		expect(() => food.setDiscount(greaterThanOneDiscount))
@@ -81,7 +66,7 @@ describe('Food entity', () => {
 
 		{
 			const greaterThanOneDiscount = datatype.number({ min: 1, max: 100 });
-			expect(() => Food.new(name.findName(), datatype.number(), greaterThanOneDiscount))
+			expect(() => Food.new(name.findName(), new Price(datatype.number()), greaterThanOneDiscount))
 				.toThrowError(
 					new Error(
 						`A food discount can not be greater than 1 or lower than 0. ${greaterThanOneDiscount}`
@@ -92,7 +77,7 @@ describe('Food entity', () => {
 
 	it('throw a error when set the discount lower than 0', () => {
 		const foodDiscount = datatype.number({ min: 0, max: 1, precision: 0.0001 });
-		const food = Food.new(name.findName(), datatype.number(), foodDiscount);
+		const food = Food.new(name.findName(), new Price(datatype.number()), foodDiscount);
 
 		const lowerThanZeroDiscount = datatype.number({ min: -100, max: -.1 });
 		expect(() => food.setDiscount(lowerThanZeroDiscount))
@@ -105,7 +90,7 @@ describe('Food entity', () => {
 
 		{
 			const lowerThanZeroDiscount = datatype.number({ min: -100, max: -.1 });
-			expect(() => Food.new(name.findName(), datatype.number(), lowerThanZeroDiscount))
+			expect(() => Food.new(name.findName(), new Price(datatype.number()), lowerThanZeroDiscount))
 				.toThrowError(
 					new Error(
 						`A food discount can not be greater than 1 or lower than 0. ${lowerThanZeroDiscount}`
@@ -115,18 +100,18 @@ describe('Food entity', () => {
 	});
 
 	it('return the calculated price', () => {
-		const rawPrice = 200;
+		const rawPrice = new Price(200);
 		const discount = 0.20;
 		const food = Food.new(name.findName(), rawPrice, discount);
 
-		expect(food.getCalculatedPrice()).toBe(160);
+		expect(food.getCalculatedPrice()).toStrictEqual(new Price(160));
 	});
 
 	it('return a image address', () => {
 		const imageAddress = new URL(internet.url());
 		const food = Food.new(
 			name.findName(),
-			datatype.number(),
+			new Price(datatype.number()),
 			datatype.number({ min: 0, max: 1, precision: 0.0001 }),
 			imageAddress
 		);
@@ -137,7 +122,7 @@ describe('Food entity', () => {
 	it('not return a image address', () => {
 		const food = Food.new(
 			name.findName(),
-			datatype.number(),
+			new Price(datatype.number()),
 			datatype.number({ min: 0, max: 1, precision: 0.0001 })
 		);
 
@@ -147,7 +132,7 @@ describe('Food entity', () => {
 	it('set the image address', () => {
 		const food = Food.new(
 			name.findName(),
-			datatype.number(),
+			new Price(datatype.number()),
 			datatype.number({ min: 0, max: 1, precision: 0.0001 })
 		);
 		expect(food.getImageAddress()).toBeUndefined();
@@ -161,7 +146,7 @@ describe('Food entity', () => {
 	it('remove a image address', () => {
 		const food = Food.new(
 			name.findName(),
-			datatype.number(),
+			new Price(datatype.number()),
 			datatype.number({ min: 0, max: 1, precision: 0.0001 })
 		);
 

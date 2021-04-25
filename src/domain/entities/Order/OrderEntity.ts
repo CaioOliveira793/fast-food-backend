@@ -1,6 +1,7 @@
 import { Entity } from '@entities/abstract/Entity';
 import { OrderItem } from '@entities/OrderItem';
 import { Id } from '@domainTypes/Id';
+import { Price } from '@domainTypes/Price';
 
 export const enum OrderStatus {
 	Preparing,
@@ -13,14 +14,14 @@ export class Order extends Entity {
 
 	public readonly clientId: Id;
 	private readonly items: Map<string, OrderItem>;
-	public readonly totalPrice: number;
+	public readonly totalPrice: Price;
 	private status: OrderStatus;
 
 	constructor(
 		id: Id,
 		clientId: Id,
 		items: OrderItem[],
-		totalPrice: number,
+		totalPrice: Price,
 		status: OrderStatus
 	) {
 		super();
@@ -35,9 +36,9 @@ export class Order extends Entity {
 		if (items.length < 1)
 			throw new Error('A Order need at least one item to be created');
 
-		const totalPrice = items
-			.map(orderItem => orderItem.price * orderItem.count)
-			.reduce((prevPrice, currPrice) => prevPrice + currPrice);
+		const totalPrice = new Price(items
+			.map(orderItem => orderItem.price.calculateTotal(orderItem.count).getValue())
+			.reduce((prevPrice, currPrice) => prevPrice + currPrice));
 		return new Order(new Id, clientId, items, totalPrice, OrderStatus.Preparing);
 	}
 

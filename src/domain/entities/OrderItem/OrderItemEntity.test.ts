@@ -3,13 +3,14 @@ import { datatype, internet, name } from 'faker';
 import { Food } from '@entities/Food';
 import { OrderItem } from '@entities/OrderItem';
 import { URL } from 'url';
+import { Price } from '@domainTypes/Price';
 
 
 describe('Order Item entity', () => {
 
 	it('create a new Order entity from Food', () => {
 		const foodName = name.findName();
-		const foodPrice = datatype.number({ min: 1, max: 9999 });
+		const foodPrice = new Price(datatype.number({ min: 1, max: 9999 }));
 		const foodDiscount = datatype.number({ min: 0.1, max: 0.90, precision: 0.0001 });
 		const foodImageAddress = internet.url();
 		const orderCount = 12;
@@ -18,12 +19,12 @@ describe('Order Item entity', () => {
 		const orderItem = OrderItem.fromFood(food, orderCount);
 
 		expect(orderItem.name).toBe(foodName);
-		expect(orderItem.price).toBe(food.getCalculatedPrice() * orderCount);
+		expect(orderItem.price).toStrictEqual(food.getCalculatedPrice().calculateTotal(orderCount));
 	});
 
 	it('return the unfinished count', () => {
 		const orderItemName = name.findName();
-		const orderItemPrice = datatype.number({ min: 1, max: 9999 });
+		const orderItemPrice = new Price(datatype.number({ min: 1, max: 9999 }));
 		const orderItemCount = 3;
 		const orderItem = OrderItem.new(orderItemName, orderItemPrice, orderItemCount);
 
@@ -37,7 +38,7 @@ describe('Order Item entity', () => {
 
 	it('finish the Order Item', () => {
 		const orderItemName = name.findName();
-		const orderItemPrice = datatype.number({ min: 1, max: 9999 });
+		const orderItemPrice = new Price(datatype.number({ min: 1, max: 9999 }));
 		const orderItemCount = 3;
 		const orderItem = OrderItem.new(orderItemName, orderItemPrice, orderItemCount);
 
@@ -51,7 +52,7 @@ describe('Order Item entity', () => {
 
 	it('throw an Error when finish more items than that are unfinished', () => {
 		const orderItemName = name.findName();
-		const orderItemPrice = datatype.number({ min: 1, max: 9999 });
+		const orderItemPrice = new Price(datatype.number({ min: 1, max: 9999 }));
 		const orderItemCount = 2;
 		const orderItem = OrderItem.new(orderItemName, orderItemPrice, orderItemCount);
 

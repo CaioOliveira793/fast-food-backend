@@ -2,19 +2,20 @@ import { URL } from 'url';
 
 import { Entity } from '@entities/abstract/Entity';
 import { Id } from '@domainTypes/Id';
+import { Price } from '@domainTypes/Price';
 
 export class Food extends Entity {
 	public readonly id: Id;
 
 	private name: string;
-	private rawPrice: number;
+	private rawPrice: Price;
 	private discount: number;
 	private imageAddress?: URL;
 
 	constructor(
 		id: Id,
 		name: string,
-		rawPrice: number,
+		rawPrice: Price,
 		discount = 0,
 		imageAddress?: URL
 	) {
@@ -25,14 +26,12 @@ export class Food extends Entity {
 
 		if (discount < 0 || discount > 1)
 			throw new Error(`A food discount can not be greater than 1 or lower than 0. ${discount}`);
-		if (rawPrice < 0)
-			throw new Error(`A food price can not be a negative value. ${rawPrice}`);
 
 		this.discount = discount;
 		this.rawPrice = rawPrice;
 	}
 
-	public static new(name: string, rawPrice: number, discount = 0, imageAddress?: URL): Food {
+	public static new(name: string, rawPrice: Price, discount = 0, imageAddress?: URL): Food {
 		return new Food(new Id, name, rawPrice, discount, imageAddress);
 	}
 
@@ -43,14 +42,10 @@ export class Food extends Entity {
 		this.name = name;
 	}
 
-	public getRawPrice(): number {
+	public getRawPrice(): Price {
 		return this.rawPrice;
 	}
-	public setRawPrice(rawPrice: number): void {
-		if (rawPrice < 0)
-			// TODO: use a DomainException type
-			throw new Error(`A food price can not be a negative value. ${rawPrice}`);
-
+	public setRawPrice(rawPrice: Price): void {
 		this.rawPrice = rawPrice;
 	}
 
@@ -65,8 +60,8 @@ export class Food extends Entity {
 		this.discount = discount;
 	}
 
-	public getCalculatedPrice(): number {
-		return this.rawPrice - (this.rawPrice * this.discount);
+	public getCalculatedPrice(): Price {
+		return this.rawPrice.applyDiscount(this.discount);
 	}
 
 	public getImageAddress(): URL | undefined {

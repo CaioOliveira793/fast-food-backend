@@ -3,6 +3,7 @@ import { datatype, name } from 'faker';
 import { Order, OrderStatus } from '@entities/Order';
 import { OrderItem } from '@entities/OrderItem';
 import { Id } from '@domainTypes/Id';
+import { Price } from '@domainTypes/Price';
 
 
 describe('Order entity', () => {
@@ -12,7 +13,7 @@ describe('Order entity', () => {
 	beforeEach(() => {
 		orderItem = OrderItem.new(
 			name.findName(),
-			datatype.number(),
+			new Price(datatype.number()),
 			datatype.number({ min: 1, max: 9999 })
 		);
 	});
@@ -23,21 +24,21 @@ describe('Order entity', () => {
 	});
 
 	it('create a Order with the total price', () => {
-		const orderPrice = orderItem.count * orderItem.price;
+		const orderPrice = orderItem.price.calculateTotal(orderItem.count);
 		const order = Order.new(repeatedId, [orderItem]);
 
-		expect(order.totalPrice).toBe(orderPrice);
+		expect(order.totalPrice).toStrictEqual(orderPrice);
 	});
 
 	it('return the order items', () => {
 		const orderItem2 = OrderItem.new(
 			name.findName(),
-			datatype.number(),
+			new Price(datatype.number()),
 			datatype.number({ min: 1, max: 9999 })
 		);
 		const orderItem3 = OrderItem.new(
 			name.findName(),
-			datatype.number(),
+			new Price(datatype.number()),
 			datatype.number({ min: 1, max: 9999 })
 		);
 		const order = Order.new(repeatedId, [orderItem, orderItem2, orderItem3]);
@@ -80,7 +81,7 @@ describe('Order entity', () => {
 	it('return the status "Preparing" after finish some items', () => {
 		const orderItem2 = OrderItem.new(
 			name.findName(),
-			datatype.number(),
+			new Price(datatype.number()),
 			datatype.number({ min: 1, max: 9999 })
 		);
 		const order = Order.new(repeatedId, [orderItem, orderItem2]);

@@ -4,6 +4,7 @@ import { Food } from '@entities/Food';
 import { OrderItem } from '@entities/OrderItem';
 import { URL } from 'url';
 import { Price } from '@domainTypes/Price';
+import { Discount } from '@domainTypes/Discount';
 
 
 describe('Order Item entity', () => {
@@ -11,7 +12,7 @@ describe('Order Item entity', () => {
 	it('create a new Order entity from Food', () => {
 		const foodName = name.findName();
 		const foodPrice = new Price(datatype.number({ min: 1, max: 9999 }));
-		const foodDiscount = datatype.number({ min: 0.1, max: 0.90, precision: 0.0001 });
+		const foodDiscount = new Discount(datatype.number({ min: 0.1, max: 0.90, precision: 0.0001 }));
 		const foodImageAddress = internet.url();
 		const orderCount = 12;
 

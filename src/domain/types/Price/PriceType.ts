@@ -1,3 +1,4 @@
+import { Discount } from '@domainTypes/Discount';
 import { DomainType } from '@domainTypes/DomainType';
 
 
@@ -17,8 +18,8 @@ export class Price extends DomainType<number> {
 		return this.value;
 	}
 
-	public applyDiscount(discount: number): Price {
-		return new Price(this.value - (this.value * discount));
+	public applyDiscount(discount: Discount): Price {
+		return new Price(this.value - (this.value * discount.getValue()));
 	}
 
 	public calculateTotal(count: number): Price {

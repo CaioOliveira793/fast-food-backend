@@ -3,35 +3,37 @@ import { URL } from 'url';
 import { Entity } from '@entities/abstract/Entity';
 import { Id } from '@domainTypes/Id';
 import { Price } from '@domainTypes/Price';
+import { Discount } from '@domainTypes/Discount';
 
 export class Food extends Entity {
 	public readonly id: Id;
 
 	private name: string;
 	private rawPrice: Price;
-	private discount: number;
+	private discount: Discount;
 	private imageAddress?: URL;
 
 	constructor(
 		id: Id,
 		name: string,
 		rawPrice: Price,
-		discount = 0,
+		discount: Discount,
 		imageAddress?: URL
 	) {
 		super();
 		this.id = id;
 		this.name = name;
 		this.imageAddress = imageAddress;
-
-		if (discount < 0 || discount > 1)
-			throw new Error(`A food discount can not be greater than 1 or lower than 0. ${discount}`);
-
 		this.discount = discount;
 		this.rawPrice = rawPrice;
 	}
 
-	public static new(name: string, rawPrice: Price, discount = 0, imageAddress?: URL): Food {
+	public static new(
+		name: string,
+		rawPrice: Price,
+		discount = new Discount(0),
+		imageAddress?: URL
+	): Food {
 		return new Food(new Id, name, rawPrice, discount, imageAddress);
 	}
 
@@ -49,14 +51,10 @@ export class Food extends Entity {
 		this.rawPrice = rawPrice;
 	}
 
-	public getDiscount(): number {
+	public getDiscount(): Discount {
 		return this.discount;
 	}
-	public setDiscount(discount: number): void {
-		if (discount < 0 || discount > 1)
-			// TODO: use a DomainException type
-			throw new Error(`A food discount can not be greater than 1 or lower than 0. ${discount}`);
-
+	public setDiscount(discount: Discount): void {
 		this.discount = discount;
 	}
 

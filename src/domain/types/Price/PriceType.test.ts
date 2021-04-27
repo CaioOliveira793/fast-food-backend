@@ -1,3 +1,4 @@
+import { Discount } from '@domainTypes/Discount';
 import { Price } from './PriceType';
 
 
@@ -19,7 +20,7 @@ describe('Name type', () => {
 
 	it('apply the Discount in price', () => {
 		const price = new Price(12.50);
-		const discountedPrice = price.applyDiscount(0.10);
+		const discountedPrice = price.applyDiscount(new Discount(0.10));
 
 		expect(discountedPrice.getValue()).toBe(11.25);
 	});

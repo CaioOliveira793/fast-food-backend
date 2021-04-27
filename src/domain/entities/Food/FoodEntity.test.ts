@@ -3,6 +3,9 @@ import { URL } from 'url';
 
 import { Food } from '@entities/Food';
 import { Price } from '@domainTypes/Price';
+import { Discount } from '@domainTypes/Discount';
+
+const fakeNumberProperties = { min: 0, max: 1, precision: 0.0001 };
 
 describe('Food entity', () => {
 
@@ -37,7 +40,7 @@ describe('Food entity', () => {
 	});
 
 	it('return the discount', () => {
-		const foodDiscount = datatype.number({ min: 0, max: 1, precision: 0.0001 });
+		const foodDiscount = new Discount(datatype.number(fakeNumberProperties));
 		const food = Food.new(name.findName(), new Price(datatype.number()), foodDiscount);
 
 		expect(food.getDiscount()).toBe(foodDiscount);
@@ -45,63 +48,15 @@ describe('Food entity', () => {
 
 	it('set the discount', () => {
 		const food = Food.new(name.findName(), new Price(datatype.number()));
-		const newDiscount = datatype.number({ min: 0, max: 1, precision: 0.0001 });
+		const newDiscount = new Discount(datatype.number(fakeNumberProperties));
 		food.setDiscount(newDiscount);
 
 		expect(food.getDiscount()).toBe(newDiscount);
 	});
 
-	it('throw a error when set the discount greater than 1', () => {
-		const foodDiscount = datatype.number({ min: 0, max: 1, precision: 0.0001 });
-		const food = Food.new(name.findName(), new Price(datatype.number()), foodDiscount);
-
-		const greaterThanOneDiscount = datatype.number({ min: 1, max: 100 });
-		expect(() => food.setDiscount(greaterThanOneDiscount))
-			.toThrowError(
-				new Error(
-					`A food discount can not be greater than 1 or lower than 0. ${greaterThanOneDiscount}`
-				)
-			);
-		expect(food.getDiscount()).toBe(foodDiscount);
-
-		{
-			const greaterThanOneDiscount = datatype.number({ min: 1, max: 100 });
-			expect(() => Food.new(name.findName(), new Price(datatype.number()), greaterThanOneDiscount))
-				.toThrowError(
-					new Error(
-						`A food discount can not be greater than 1 or lower than 0. ${greaterThanOneDiscount}`
-					)
-				);
-		}
-	});
-
-	it('throw a error when set the discount lower than 0', () => {
-		const foodDiscount = datatype.number({ min: 0, max: 1, precision: 0.0001 });
-		const food = Food.new(name.findName(), new Price(datatype.number()), foodDiscount);
-
-		const lowerThanZeroDiscount = datatype.number({ min: -100, max: -.1 });
-		expect(() => food.setDiscount(lowerThanZeroDiscount))
-			.toThrowError(
-				new Error(
-					`A food discount can not be greater than 1 or lower than 0. ${lowerThanZeroDiscount}`
-				)
-			);
-		expect(food.getDiscount()).toBe(foodDiscount);
-
-		{
-			const lowerThanZeroDiscount = datatype.number({ min: -100, max: -.1 });
-			expect(() => Food.new(name.findName(), new Price(datatype.number()), lowerThanZeroDiscount))
-				.toThrowError(
-					new Error(
-						`A food discount can not be greater than 1 or lower than 0. ${lowerThanZeroDiscount}`
-					)
-				);
-		}
-	});
-
 	it('return the calculated price', () => {
 		const rawPrice = new Price(200);
-		const discount = 0.20;
+		const discount = new Discount(0.20);
 		const food = Food.new(name.findName(), rawPrice, discount);
 
 		expect(food.getCalculatedPrice()).toStrictEqual(new Price(160));
@@ -112,7 +67,7 @@ describe('Food entity', () => {
 		const food = Food.new(
 			name.findName(),
 			new Price(datatype.number()),
-			datatype.number({ min: 0, max: 1, precision: 0.0001 }),
+			new Discount(datatype.number(fakeNumberProperties)),
 			imageAddress
 		);
 
@@ -123,7 +78,7 @@ describe('Food entity', () => {
 		const food = Food.new(
 			name.findName(),
 			new Price(datatype.number()),
-			datatype.number({ min: 0, max: 1, precision: 0.0001 })
+			new Discount(datatype.number(fakeNumberProperties))
 		);
 
 		expect(food.getImageAddress()).toBeUndefined();
@@ -133,7 +88,7 @@ describe('Food entity', () => {
 		const food = Food.new(
 			name.findName(),
 			new Price(datatype.number()),
-			datatype.number({ min: 0, max: 1, precision: 0.0001 })
+			new Discount(datatype.number(fakeNumberProperties))
 		);
 		expect(food.getImageAddress()).toBeUndefined();
 
@@ -147,7 +102,7 @@ describe('Food entity', () => {
 		const food = Food.new(
 			name.findName(),
 			new Price(datatype.number()),
-			datatype.number({ min: 0, max: 1, precision: 0.0001 })
+			new Discount(datatype.number(fakeNumberProperties))
 		);
 
 		food.removeImageAddress();

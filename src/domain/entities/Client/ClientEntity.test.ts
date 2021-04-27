@@ -1,11 +1,11 @@
 import { internet, name } from 'faker';
-import { v4 as uuidv4 } from 'uuid';
 
 import { Client } from '@entities/Client';
+import { Id } from '@domainTypes/Id';
 
 
 describe('Client Entity', () => {
-	const repeatedId = uuidv4();
+	const repeatedId = new Id;
 
 	it('return the name', () => {
 		const clientName = name.findName();
@@ -54,7 +54,7 @@ describe('Client Entity', () => {
 
 	it('add favorite foods id', () => {
 		const client = Client.new(name.findName(), internet.email(), internet.password());
-		const foodId = uuidv4();
+		const foodId = new Id;
 
 		client.addFavoriteFood(repeatedId);
 		client.addFavoriteFood(foodId);
@@ -77,7 +77,7 @@ describe('Client Entity', () => {
 			expect(favoriteFoodsId).toStrictEqual([]);
 		}
 		{
-			const foodId = uuidv4();
+			const foodId = new Id;
 			client.addFavoriteFood(repeatedId);
 			client.addFavoriteFood(foodId);
 			client.addFavoriteFood(repeatedId);
@@ -93,10 +93,10 @@ describe('Client Entity', () => {
 		const client = Client.new(name.findName(), internet.email(), internet.password());
 		expect(client.getFavoriteFoodsId()).toStrictEqual([]);
 
-		const food1 = uuidv4(), food2 = uuidv4();
+		const food1 = new Id, food2 = new Id;
 		client.addFavoriteFood(food1);
 		client.addFavoriteFood(food2);
-		client.addFavoriteFood(uuidv4());
+		client.addFavoriteFood(new Id);
 		expect(client.getFavoriteFoodsId()).toHaveLength(3);
 
 		client.removeFavoriteFood(food1);
@@ -113,7 +113,7 @@ describe('Client Entity', () => {
 
 		expect(client.getRequestedOrdersId()).toStrictEqual([repeatedId]);
 
-		const orderId = uuidv4();
+		const orderId = new Id;
 		client.addRequestedOrder(orderId);
 
 		const requestedOrdersId = client.getRequestedOrdersId();
@@ -128,14 +128,14 @@ describe('Client Entity', () => {
 
 		expect(client.getRequestedOrdersId()).toStrictEqual([]);
 
-		client.addRequestedOrder(uuidv4());
+		client.addRequestedOrder(new Id);
 		expect(client.getRequestedOrdersId()).toHaveLength(1);
 
-		client.addRequestedOrder(uuidv4());
-		client.addRequestedOrder(uuidv4());
+		client.addRequestedOrder(new Id);
+		client.addRequestedOrder(new Id);
 		expect(client.getRequestedOrdersId()).toHaveLength(3);
 
-		client.addRequestedOrder(uuidv4());
+		client.addRequestedOrder(new Id);
 		expect(client.getRequestedOrdersId()).toHaveLength(4);
 	});
 

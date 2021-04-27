@@ -1,11 +1,12 @@
 import { Actor } from '@entities/abstract/Actor';
 import { Id } from '@domainTypes/Id';
+import { Email } from '@domainTypes/Email';
 
 
 export class Client extends Actor {
 	public readonly id: Id;
 	protected name: string;
-	protected email: string;
+	protected email: Email;
 	protected passwordHash: string;
 
 	private requestedOrdersId: Set<Id>;
@@ -14,7 +15,7 @@ export class Client extends Actor {
 	constructor(
 		id: Id,
 		name: string,
-		email: string,
+		email: Email,
 		passwordHash: string,
 		requestedOrdersId?: Id[],
 		favoriteFoodsId?: Id[],
@@ -28,7 +29,7 @@ export class Client extends Actor {
 		this.favoriteFoodsId = new Set(favoriteFoodsId);
 	}
 
-	public static new(name: string, email: string, passwordHash: string): Client {
+	public static new(name: string, email: Email, passwordHash: string): Client {
 		return new Client(new Id, name, email, passwordHash, [], []);
 	}
 
@@ -39,10 +40,10 @@ export class Client extends Actor {
 		this.name = name;
 	}
 
-	public getEmail(): string {
+	public getEmail(): Email {
 		return this.email;
 	}
-	public setEmail(email: string): void {
+	public setEmail(email: Email): void {
 		this.email = email;
 	}
 

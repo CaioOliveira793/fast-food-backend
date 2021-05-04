@@ -1,11 +1,12 @@
 import { Actor } from '@entities/abstract/Actor';
 import { Id } from '@domainTypes/Id';
 import { Email } from '@domainTypes/Email';
+import { Name } from '@domainTypes/Name';
 
 
 export class Client extends Actor {
 	public readonly id: Id;
-	protected name: string;
+	protected name: Name;
 	protected email: Email;
 	protected passwordHash: string;
 
@@ -14,7 +15,7 @@ export class Client extends Actor {
 
 	constructor(
 		id: Id,
-		name: string,
+		name: Name,
 		email: Email,
 		passwordHash: string,
 		requestedOrdersId?: Id[],
@@ -29,14 +30,14 @@ export class Client extends Actor {
 		this.favoriteFoodsId = new Set(favoriteFoodsId);
 	}
 
-	public static new(name: string, email: Email, passwordHash: string): Client {
+	public static new(name: Name, email: Email, passwordHash: string): Client {
 		return new Client(new Id, name, email, passwordHash, [], []);
 	}
 
-	public getName(): string {
+	public getName(): Name {
 		return this.name;
 	}
-	public setName(name: string): void {
+	public setName(name: Name): void {
 		this.name = name;
 	}
 

@@ -3,21 +3,27 @@ import { internet, name } from 'faker';
 import { Client } from '@entities/Client';
 import { Id } from '@domainTypes/Id';
 import { Email } from '@domainTypes/Email';
+import { Name } from '@domainTypes/Name';
 
 
 describe('Client Entity', () => {
 	const repeatedId = new Id;
 
 	it('return the name', () => {
-		const clientName = name.findName();
+		const clientName = new Name(name.findName());
 		const client = Client.new(clientName, new Email(internet.email()), internet.password());
 
 		expect(client.getName()).toBe(clientName);
 	});
 
 	it('modify the name', () => {
-		const client = Client.new(name.findName(), new Email(internet.email()), internet.password());
-		const newClientName = name.findName();
+		const client = Client.new(
+			new Name(name.findName()),
+			new Email(internet.email()),
+			internet.password()
+		);
+
+		const newClientName = new Name(name.findName());
 		client.setName(newClientName);
 
 		expect(client.getName()).toBe(newClientName);
@@ -25,13 +31,18 @@ describe('Client Entity', () => {
 
 	it('return the email', () => {
 		const clientEmail = new Email(internet.email());
-		const client = Client.new(name.findName(), clientEmail, internet.password());
+		const client = Client.new(new Name(name.findName()), clientEmail, internet.password());
 
 		expect(client.getEmail()).toBe(clientEmail);
 	});
 
 	it('modify the email', () => {
-		const client = Client.new(name.findName(), new Email(internet.email()), internet.password());
+		const client = Client.new(
+			new Name(name.findName()),
+			new Email(internet.email()),
+			internet.password()
+		);
+
 		const newClientEmail = new Email(internet.email());
 		client.setEmail(newClientEmail);
 
@@ -40,13 +51,22 @@ describe('Client Entity', () => {
 
 	it('return the passwordHash', () => {
 		const clientPasswordHash = internet.password();
-		const client = Client.new(name.findName(), new Email(internet.email()), clientPasswordHash);
+		const client = Client.new(
+			new Name(name.findName()),
+			new Email(internet.email()),
+			clientPasswordHash
+		);
 
 		expect(client.getPasswordHash()).toBe(clientPasswordHash);
 	});
 
 	it('modify the passwordHash', () => {
-		const client = Client.new(name.findName(), new Email(internet.email()), internet.password());
+		const client = Client.new(
+			new Name(name.findName()),
+			new Email(internet.email()),
+			internet.password()
+		);
+
 		const newClientPasswordHash = internet.password();
 		client.setPasswordHash(newClientPasswordHash);
 
@@ -54,7 +74,12 @@ describe('Client Entity', () => {
 	});
 
 	it('add favorite foods id', () => {
-		const client = Client.new(name.findName(), new Email(internet.email()), internet.password());
+		const client = Client.new(
+			new Name(name.findName()),
+			new Email(internet.email()),
+			internet.password()
+		);
+
 		const foodId = new Id;
 
 		client.addFavoriteFood(repeatedId);
@@ -70,7 +95,12 @@ describe('Client Entity', () => {
 	});
 
 	it('remove favorite foods id', () => {
-		const client = Client.new(name.findName(), new Email(internet.email()), internet.password());
+		const client = Client.new(
+			new Name(name.findName()),
+			new Email(internet.email()),
+			internet.password()
+		);
+
 		{
 			client.removeFavoriteFood(repeatedId);
 			const favoriteFoodsId = client.getFavoriteFoodsId();
@@ -91,7 +121,12 @@ describe('Client Entity', () => {
 	});
 
 	it('return favorite foods id', () => {
-		const client = Client.new(name.findName(), new Email(internet.email()), internet.password());
+		const client = Client.new(
+			new Name(name.findName()),
+			new Email(internet.email()),
+			internet.password()
+		);
+
 		expect(client.getFavoriteFoodsId()).toStrictEqual([]);
 
 		const food1 = new Id, food2 = new Id;
@@ -108,7 +143,12 @@ describe('Client Entity', () => {
 	});
 
 	it('add a requested order id', () => {
-		const client = Client.new(name.findName(), new Email(internet.email()), internet.password());
+		const client = Client.new(
+			new Name(name.findName()),
+			new Email(internet.email()),
+			internet.password()
+		);
+
 		client.addRequestedOrder(repeatedId);
 		client.addRequestedOrder(repeatedId);
 
@@ -125,7 +165,11 @@ describe('Client Entity', () => {
 	});
 
 	it('return the requested orders id', () => {
-		const client = Client.new(name.findName(), new Email(internet.email()), internet.password());
+		const client = Client.new(
+			new Name(name.findName()),
+			new Email(internet.email()),
+			internet.password()
+		);
 
 		expect(client.getRequestedOrdersId()).toStrictEqual([]);
 

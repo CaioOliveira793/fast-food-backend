@@ -1,6 +1,7 @@
 import { Actor } from '@entities/abstract/Actor';
 import { Id } from '@domainTypes/Id';
 import { Email } from '@domainTypes/Email';
+import { Name } from '@domainTypes/Name';
 
 export interface FinishedFood {
 	orderId: string;
@@ -11,7 +12,7 @@ export interface FinishedFood {
 export class Cooker extends Actor {
 	public readonly id: Id;
 
-	protected name: string;
+	protected name: Name;
 	protected email: Email;
 	protected passwordHash: string;
 
@@ -19,7 +20,7 @@ export class Cooker extends Actor {
 
 	constructor(
 		id: Id,
-		name: string,
+		name: Name,
 		email: Email,
 		passwordHash: string,
 		finishedFoods?: FinishedFood[]
@@ -32,14 +33,14 @@ export class Cooker extends Actor {
 		this.finishedFoods = finishedFoods ?? [];
 	}
 
-	public static new(name: string, email: Email, passwordHash: string): Cooker {
+	public static new(name: Name, email: Email, passwordHash: string): Cooker {
 		return new Cooker(new Id, name, email, passwordHash);
 	}
 
-	public getName(): string {
+	public getName(): Name {
 		return this.name;
 	}
-	public setName(name: string): void {
+	public setName(name: Name): void {
 		this.name = name;
 	}
 	public getEmail(): Email {

@@ -4,12 +4,13 @@ import { Entity } from '@entities/abstract/Entity';
 import { Food } from '@entities/Food';
 import { Id } from '@domainTypes/Id';
 import { Price } from '@domainTypes/Price';
+import { Name } from '@domainTypes/Name';
 
 
 export class OrderItem extends Entity {
 	public readonly id: Id;
 
-	public readonly name: string;
+	public readonly name: Name;
 	public readonly imageAddress?: URL;
 	public readonly price: Price;
 	public readonly count: number;
@@ -17,7 +18,7 @@ export class OrderItem extends Entity {
 
 	constructor(
 		id: Id,
-		name: string,
+		name: Name,
 		price: Price,
 		count: number,
 		finishedCount: number,
@@ -32,7 +33,7 @@ export class OrderItem extends Entity {
 		this.finishedCount = finishedCount;
 	}
 
-	public static new(name: string, unitPrice: Price, count: number, imageAddress?: URL): OrderItem {
+	public static new(name: Name, unitPrice: Price, count: number, imageAddress?: URL): OrderItem {
 		return new OrderItem(new Id, name, unitPrice.calculateTotal(count), count, 0, imageAddress);
 	}
 	public static fromFood(food: Food, count: number): OrderItem {
